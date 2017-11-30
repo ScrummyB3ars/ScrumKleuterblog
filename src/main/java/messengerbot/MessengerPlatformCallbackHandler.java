@@ -1,4 +1,4 @@
-package com.github.messenger4j.quickstart.boot;
+package messengerbot;
 
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;

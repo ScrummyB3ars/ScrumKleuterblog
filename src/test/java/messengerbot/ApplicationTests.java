@@ -1,4 +1,4 @@
-package com.github.messenger4j.quickstart.boot;
+package messengerbot;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
