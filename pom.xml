@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.messenger4j</groupId>
-	<artifactId>messenger4j-spring-boot-quickstart-template</artifactId>
+	<groupId>toddlr</groupId>
+	<artifactId>messenger-bot</artifactId>
 	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>Facebook Messenger Chatbot Template using Java, Spring Boot, and messenger4j</description>
+	<description>Facebook Messenger Chatbot using Java, Spring Boot, and messenger4j</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
