@@ -23,4 +23,6 @@ dist/
 nbdist/
 .nb-gradle/
 
+start.sh
+
 .DS_Store

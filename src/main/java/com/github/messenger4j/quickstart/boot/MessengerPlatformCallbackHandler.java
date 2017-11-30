@@ -1,10 +1,5 @@
 package com.github.messenger4j.quickstart.boot;
 
-import static com.github.messenger4j.MessengerPlatform.CHALLENGE_REQUEST_PARAM_NAME;
-import static com.github.messenger4j.MessengerPlatform.MODE_REQUEST_PARAM_NAME;
-import static com.github.messenger4j.MessengerPlatform.SIGNATURE_HEADER_NAME;
-import static com.github.messenger4j.MessengerPlatform.VERIFY_TOKEN_REQUEST_PARAM_NAME;
-
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -14,39 +9,24 @@ import com.github.messenger4j.receive.events.AccountLinkingEvent.AccountLinkingS
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Attachment;
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.AttachmentType;
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Payload;
-import com.github.messenger4j.receive.handlers.AccountLinkingEventHandler;
-import com.github.messenger4j.receive.handlers.AttachmentMessageEventHandler;
-import com.github.messenger4j.receive.handlers.EchoMessageEventHandler;
-import com.github.messenger4j.receive.handlers.FallbackEventHandler;
-import com.github.messenger4j.receive.handlers.MessageDeliveredEventHandler;
-import com.github.messenger4j.receive.handlers.MessageReadEventHandler;
-import com.github.messenger4j.receive.handlers.OptInEventHandler;
-import com.github.messenger4j.receive.handlers.PostbackEventHandler;
-import com.github.messenger4j.receive.handlers.QuickReplyMessageEventHandler;
-import com.github.messenger4j.receive.handlers.TextMessageEventHandler;
-import com.github.messenger4j.send.MessengerSendClient;
-import com.github.messenger4j.send.NotificationType;
-import com.github.messenger4j.send.QuickReply;
-import com.github.messenger4j.send.Recipient;
-import com.github.messenger4j.send.SenderAction;
+import com.github.messenger4j.receive.handlers.*;
+import com.github.messenger4j.send.*;
 import com.github.messenger4j.send.buttons.Button;
 import com.github.messenger4j.send.templates.ButtonTemplate;
 import com.github.messenger4j.send.templates.GenericTemplate;
 import com.github.messenger4j.send.templates.ReceiptTemplate;
-import java.util.Date;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
+
+import static com.github.messenger4j.MessengerPlatform.*;
 
 /**
  * This is the main class for inbound and outbound communication with the Facebook Messenger Platform.
@@ -149,62 +129,12 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
-                    case "image":
-                        sendImageMessage(senderId);
-                        break;
-
                     case "gif":
                         sendGifMessage(senderId);
                         break;
-
-                    case "audio":
-                        sendAudioMessage(senderId);
-                        break;
-
-                    case "video":
-                        sendVideoMessage(senderId);
-                        break;
-
-                    case "file":
-                        sendFileMessage(senderId);
-                        break;
-
-                    case "button":
-                        sendButtonMessage(senderId);
-                        break;
-
-                    case "generic":
-                        sendGenericMessage(senderId);
-                        break;
-
-                    case "receipt":
-                        sendReceiptMessage(senderId);
-                        break;
-
-                    case "quick reply":
-                        sendQuickReply(senderId);
-                        break;
-
-                    case "read receipt":
-                        sendReadReceipt(senderId);
-                        break;
-
-                    case "typing on":
-                        sendTypingOn(senderId);
-                        break;
-
-                    case "typing off":
-                        sendTypingOff(senderId);
-                        break;
-
-                    /*
-                    case "account linking":
-                        sendAccountLinking(senderId);
-                        break;
-                    */
-
                     default:
-                        sendTextMessage(senderId, messageText);
+                        sendTextMessage(senderId, "Hallo!");
+                        sendRegistrationMessage(senderId);
                 }
             } catch (MessengerApiException | MessengerIOException e) {
                 handleSendException(e);
@@ -309,15 +239,13 @@ public class MessengerPlatformCallbackHandler {
         this.sendClient.sendTemplate(recipientId, receiptTemplate);
     }
 
-    private void sendQuickReply(String recipientId) throws MessengerApiException, MessengerIOException {
+    private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Action", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Comedy", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
-                .addTextQuickReply("Drama", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA").toList()
-                .addLocationQuickReply().toList()
+                .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
                 .build();
 
-        this.sendClient.sendTextMessage(recipientId, "What's your favorite movie genre?", quickReplies);
+        this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
     }
 
     private void sendReadReceipt(String recipientId) throws MessengerApiException, MessengerIOException {
@@ -363,8 +291,6 @@ public class MessengerPlatformCallbackHandler {
 
                 logger.info("Attachment of type '{}' with payload '{}'", attachmentType, payloadAsString);
             });
-
-            sendTextMessage(senderId, "Message with attachment received");
         };
     }
 
@@ -377,8 +303,6 @@ public class MessengerPlatformCallbackHandler {
             final String quickReplyPayload = event.getQuickReply().getPayload();
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-
-            sendTextMessage(senderId, "Quick reply tapped");
         };
     }
 
@@ -393,8 +317,6 @@ public class MessengerPlatformCallbackHandler {
 
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'",
                     senderId, recipientId, payload, timestamp);
-
-            sendTextMessage(senderId, "Postback called");
         };
     }
 
@@ -422,8 +344,6 @@ public class MessengerPlatformCallbackHandler {
 
             logger.info("Received authentication for user '{}' and page '{}' with pass through param '{}' at '{}'",
                     senderId, recipientId, passThroughParam, timestamp);
-
-            sendTextMessage(senderId, "Authentication successful");
         };
     }
 
