@@ -26,3 +26,5 @@ nbdist/
 start.sh
 
 .DS_Store
+
+.vscode
