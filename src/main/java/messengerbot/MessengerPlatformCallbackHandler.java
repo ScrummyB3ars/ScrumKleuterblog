@@ -129,7 +129,7 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
-                    case "gif":
+                    case "giff":
                         sendGifMessage(senderId);
                         break;
                     default:
