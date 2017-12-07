@@ -125,7 +125,7 @@ public class MessengerPlatformCallbackHandler {
                     case "aboneer":
                         subcribeUser(senderId);
                         break;
-                    case "Ben ik al geregistreerd":
+                    case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
                         break;
                     default:

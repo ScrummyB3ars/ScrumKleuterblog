@@ -1,5 +1,6 @@
 package messengerbot;
 
+import com.mashape.unirest.http.JsonNode;
 import types.Subscriber;
 
 import java.util.*;
@@ -47,5 +48,9 @@ public class RequestHandler {
     HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
     Subscriber[] subscribers = response.getBody();
     return Arrays.asList(subscribers);
+  }
+
+  public void  PostSubscriber(Subscriber sub) throws UnirestException {
+ 
   }
 }
