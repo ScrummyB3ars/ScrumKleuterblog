@@ -121,7 +121,7 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
-                    case "giff":
+                    case "gif":
                         sendGifMessage(senderId);
                         break;
                     case "help":
@@ -134,7 +134,7 @@ public class MessengerPlatformCallbackHandler {
                         checkUserStatus(senderId);
                         break;
                     default:
-                        sendTextMessage(senderId, "Hallo!");
+                        sendTextMessage(senderId, messageText.toLowerCase());
                         sendRegistrationMessage(senderId);
                 }
             } catch (MessengerApiException | MessengerIOException e) {
@@ -150,7 +150,7 @@ public class MessengerPlatformCallbackHandler {
                 .addPostbackButton("Uitschrijven", "uitschrijven").toList()
                 .addPostbackButton("Tip", "tip").toList()
                 .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Tap a button", buttons).build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
         this.sendClient.sendTemplate(recipientId, buttonTemplate);
     }
 
@@ -169,7 +169,8 @@ public class MessengerPlatformCallbackHandler {
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
+                .build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
     }
