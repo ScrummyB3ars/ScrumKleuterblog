@@ -13,6 +13,9 @@ import com.mashape.unirest.http.ObjectMapper;
 public class RequestHandler {
   private final static String URL = "https://api-toddlr.herokuapp.com";
 
+  /**
+   * Constructor, sets the objectmapper for unirest
+   */
   public RequestHandler() {
     // sets the object mapper
     Unirest.setObjectMapper(new ObjectMapper() {
@@ -37,6 +40,7 @@ public class RequestHandler {
   }
 
   /**
+   * Returns a list of subscribers
    * @return a list of strings, the sender-id's
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
