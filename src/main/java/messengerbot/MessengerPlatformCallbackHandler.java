@@ -11,10 +11,8 @@ import com.github.messenger4j.receive.events.AttachmentMessageEvent.AttachmentTy
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Payload;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.*;
-import com.github.messenger4j.send.buttons.Button;
-import com.github.messenger4j.send.templates.ButtonTemplate;
-import com.github.messenger4j.send.templates.GenericTemplate;
-import com.github.messenger4j.send.templates.ReceiptTemplate;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +26,15 @@ import java.util.List;
 
 import static com.github.messenger4j.MessengerPlatform.*;
 
+import types.*;
+
 /**
  * This is the main class for inbound and outbound communication with the Facebook Messenger Platform.
  * The callback handler is responsible for the webhook verification and processing of the inbound messages and events.
- * It showcases the features of the Messenger Platform.
- *
- * @author Max Grabenhorst
  */
 @RestController
 @RequestMapping("/callback")
 public class MessengerPlatformCallbackHandler {
-
-    private static final String RESOURCE_URL =
-            "https://raw.githubusercontent.com/fbsamples/messenger-platform-samples/master/node/public";
 
     private static final Logger logger = LoggerFactory.getLogger(MessengerPlatformCallbackHandler.class);
 
@@ -57,21 +51,17 @@ public class MessengerPlatformCallbackHandler {
      */
     @Autowired
     public MessengerPlatformCallbackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
-                                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                                            final MessengerSendClient sendClient) {
+            @Value("${messenger4j.verifyToken}") final String verifyToken, final MessengerSendClient sendClient) {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
         this.receiveClient = MessengerPlatform.newReceiveClientBuilder(appSecret, verifyToken)
                 .onTextMessageEvent(newTextMessageEventHandler())
                 .onAttachmentMessageEvent(newAttachmentMessageEventHandler())
-                .onQuickReplyMessageEvent(newQuickReplyMessageEventHandler())
-                .onPostbackEvent(newPostbackEventHandler())
-                .onAccountLinkingEvent(newAccountLinkingEventHandler())
-                .onOptInEvent(newOptInEventHandler())
+                .onQuickReplyMessageEvent(newQuickReplyMessageEventHandler()).onPostbackEvent(newPostbackEventHandler())
+                .onAccountLinkingEvent(newAccountLinkingEventHandler()).onOptInEvent(newOptInEventHandler())
                 .onEchoMessageEvent(newEchoMessageEventHandler())
                 .onMessageDeliveredEvent(newMessageDeliveredEventHandler())
-                .onMessageReadEvent(newMessageReadEventHandler())
-                .fallbackEventHandler(newFallbackEventHandler())
+                .onMessageReadEvent(newMessageReadEventHandler()).fallbackEventHandler(newFallbackEventHandler())
                 .build();
         this.sendClient = sendClient;
     }
@@ -84,8 +74,8 @@ public class MessengerPlatformCallbackHandler {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> verifyWebhook(@RequestParam(MODE_REQUEST_PARAM_NAME) final String mode,
-                                                @RequestParam(VERIFY_TOKEN_REQUEST_PARAM_NAME) final String verifyToken,
-                                                @RequestParam(CHALLENGE_REQUEST_PARAM_NAME) final String challenge) {
+            @RequestParam(VERIFY_TOKEN_REQUEST_PARAM_NAME) final String verifyToken,
+            @RequestParam(CHALLENGE_REQUEST_PARAM_NAME) final String challenge) {
 
         logger.debug("Received Webhook verification request - mode: {} | verifyToken: {} | challenge: {}", mode,
                 verifyToken, challenge);
@@ -102,7 +92,7 @@ public class MessengerPlatformCallbackHandler {
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> handleCallback(@RequestBody final String payload,
-                                               @RequestHeader(SIGNATURE_HEADER_NAME) final String signature) {
+            @RequestHeader(SIGNATURE_HEADER_NAME) final String signature) {
 
         logger.debug("Received Messenger Platform callback - payload: {} | signature: {}", payload, signature);
         try {
@@ -124,8 +114,8 @@ public class MessengerPlatformCallbackHandler {
             final String senderId = event.getSender().getId();
             final Date timestamp = event.getTimestamp();
 
-            logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
-                    messageId, messageText, senderId, timestamp);
+            logger.info("Received message '{}' with text '{}' from user '{}' at '{}'", messageId, messageText, senderId,
+                    timestamp);
 
             try {
                 switch (messageText.toLowerCase()) {
@@ -156,127 +146,16 @@ public class MessengerPlatformCallbackHandler {
 
     }
 
-    private void sendImageMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendImageAttachment(recipientId, RESOURCE_URL + "/assets/rift.png");
-    }
-
     private void sendGifMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         this.sendClient.sendImageAttachment(recipientId, "https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif");
-    }
-
-    private void sendAudioMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendAudioAttachment(recipientId, RESOURCE_URL + "/assets/sample.mp3");
-    }
-
-    private void sendVideoMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendVideoAttachment(recipientId, RESOURCE_URL + "/assets/allofus480.mov");
-    }
-
-    private void sendFileMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendFileAttachment(recipientId, RESOURCE_URL + "/assets/test.txt");
-    }
-
-    private void sendButtonMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        final List<Button> buttons = Button.newListBuilder()
-                .addUrlButton("Open Web URL", "https://www.oculus.com/en-us/rift/").toList()
-                .addPostbackButton("Trigger Postback", "DEVELOPER_DEFINED_PAYLOAD").toList()
-                .addCallButton("Call Phone Number", "+16505551234").toList()
-                .build();
-
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Tap a button", buttons).build();
-        this.sendClient.sendTemplate(recipientId, buttonTemplate);
-    }
-
-    private void sendGenericMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        final List<Button> riftButtons = Button.newListBuilder()
-                .addUrlButton("Open Web URL", "https://www.oculus.com/en-us/rift/").toList()
-                .addPostbackButton("Call Postback", "Payload for first bubble").toList()
-                .build();
-
-        final List<Button> touchButtons = Button.newListBuilder()
-                .addUrlButton("Open Web URL", "https://www.oculus.com/en-us/touch/").toList()
-                .addPostbackButton("Call Postback", "Payload for second bubble").toList()
-                .build();
-
-
-        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
-                .addElements()
-                    .addElement("rift")
-                        .subtitle("Next-generation virtual reality")
-                        .itemUrl("https://www.oculus.com/en-us/rift/")
-                        .imageUrl(RESOURCE_URL + "/assets/rift.png")
-                        .buttons(riftButtons)
-                        .toList()
-                    .addElement("touch")
-                        .subtitle("Your Hands, Now in VR")
-                        .itemUrl("https://www.oculus.com/en-us/touch/")
-                        .imageUrl(RESOURCE_URL + "/assets/touch.png")
-                        .buttons(touchButtons)
-                        .toList()
-                    .done()
-                .build();
-
-        this.sendClient.sendTemplate(recipientId, genericTemplate);
-    }
-
-    private void sendReceiptMessage(String recipientId) throws MessengerApiException, MessengerIOException {
-        final String uniqueReceiptId = "order-" + Math.floor(Math.random() * 1000);
-
-        final ReceiptTemplate receiptTemplate = ReceiptTemplate.newBuilder("Peter Chang", uniqueReceiptId, "USD", "Visa 1234")
-                .timestamp(1428444852L)
-                .addElements()
-                    .addElement("Oculus Rift", 599.00f)
-                        .subtitle("Includes: headset, sensor, remote")
-                        .quantity(1)
-                        .currency("USD")
-                        .imageUrl(RESOURCE_URL + "/assets/riftsq.png")
-                        .toList()
-                    .addElement("Samsung Gear VR", 99.99f)
-                        .subtitle("Frost White")
-                        .quantity(1)
-                        .currency("USD")
-                        .imageUrl(RESOURCE_URL + "/assets/gearvrsq.png")
-                        .toList()
-                    .done()
-                .addAddress("1 Hacker Way", "Menlo Park", "94025", "CA", "US").done()
-                .addSummary(626.66f)
-                    .subtotal(698.99f)
-                    .shippingCost(20.00f)
-                    .totalTax(57.67f)
-                    .done()
-                .addAdjustments()
-                    .addAdjustment().name("New Customer Discount").amount(-50f).toList()
-                    .addAdjustment().name("$100 Off Coupon").amount(-100f).toList()
-                    .done()
-                .build();
-
-        this.sendClient.sendTemplate(recipientId, receiptTemplate);
     }
 
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
-                .build();
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
-    }
-
-    private void sendReadReceipt(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendSenderAction(recipientId, SenderAction.MARK_SEEN);
-    }
-
-    private void sendTypingOn(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendSenderAction(recipientId, SenderAction.TYPING_ON);
-    }
-
-    private void sendTypingOff(String recipientId) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendSenderAction(recipientId, SenderAction.TYPING_OFF);
-    }
-
-    private void sendAccountLinking(String recipientId) {
-        // supported by messenger4j since 0.7.0
-        // sample implementation coming soon
     }
 
     private AttachmentMessageEventHandler newAttachmentMessageEventHandler() {
@@ -288,8 +167,8 @@ public class MessengerPlatformCallbackHandler {
             final String senderId = event.getSender().getId();
             final Date timestamp = event.getTimestamp();
 
-            logger.info("Received message '{}' with attachments from user '{}' at '{}':",
-                    messageId, senderId, timestamp);
+            logger.info("Received message '{}' with attachments from user '{}' at '{}':", messageId, senderId,
+                    timestamp);
 
             attachments.forEach(attachment -> {
                 final AttachmentType attachmentType = attachment.getType();
@@ -312,7 +191,6 @@ public class MessengerPlatformCallbackHandler {
         return event -> {
             logger.debug("Received QuickReplyMessageEvent: {}", event);
 
-            final String senderId = event.getSender().getId();
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
 
@@ -329,8 +207,8 @@ public class MessengerPlatformCallbackHandler {
             final String payload = event.getPayload();
             final Date timestamp = event.getTimestamp();
 
-            logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'",
-                    senderId, recipientId, payload, timestamp);
+            logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'", senderId,
+                    recipientId, payload, timestamp);
         };
     }
 
@@ -342,8 +220,8 @@ public class MessengerPlatformCallbackHandler {
             final AccountLinkingStatus accountLinkingStatus = event.getStatus();
             final String authorizationCode = event.getAuthorizationCode();
 
-            logger.info("Received account linking event for user '{}' with status '{}' and auth code '{}'",
-                    senderId, accountLinkingStatus, authorizationCode);
+            logger.info("Received account linking event for user '{}' with status '{}' and auth code '{}'", senderId,
+                    accountLinkingStatus, authorizationCode);
         };
     }
 
