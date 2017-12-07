@@ -132,6 +132,9 @@ public class MessengerPlatformCallbackHandler {
                     case "giff":
                         sendGifMessage(senderId);
                         break;
+                    case "aboneer":
+                        subcribeUser(senderId);
+                        break;
                     default:
                         sendTextMessage(senderId, "Hallo!");
                         sendRegistrationMessage(senderId);
@@ -140,6 +143,10 @@ public class MessengerPlatformCallbackHandler {
                 handleSendException(e);
             }
         };
+    }
+
+    private void subcribeUser(String senderId) {
+      
     }
 
     private void sendImageMessage(String recipientId) throws MessengerApiException, MessengerIOException {
@@ -243,6 +250,7 @@ public class MessengerPlatformCallbackHandler {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
                 .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
+                .addTextQuickReply("Ben ik al gebaoneerd?.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
                 .build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
