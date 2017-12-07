@@ -20,7 +20,7 @@ public class RequestHandlerTests {
   @Test
   public void TestSubscriberValue() {
     List<Subscriber> expectedSubs = new ArrayList<Subscriber>();
-    Subscriber testSub = new Subscriber(1, 2147483647, 1);
+    Subscriber testSub = new Subscriber(1, "2147483647", 1);
     expectedSubs.add(testSub);
     try {
       List<Subscriber> actualSubs = requestHandler.GetSubscribers();
