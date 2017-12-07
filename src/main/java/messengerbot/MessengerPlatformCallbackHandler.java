@@ -11,6 +11,7 @@ import com.github.messenger4j.receive.events.AttachmentMessageEvent.AttachmentTy
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Payload;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.*;
+import com.github.messenger4j.send.templates.ButtonTemplate;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
@@ -123,7 +125,7 @@ public class MessengerPlatformCallbackHandler {
                         sendGifMessage(senderId);
                         break;
                     case "help":
-                        sendHelp();
+                        sendHelp(senderId);
                         break;
                     case "aboneer":
                         subcribeUser(senderId);
@@ -141,8 +143,15 @@ public class MessengerPlatformCallbackHandler {
         };
     }
 
-    private void sendHelp() {
-        
+    private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
+        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+
+                .addPostbackButton("Aboneer", "aboneer").toList()
+                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
+                .addPostbackButton("Tip", "tip").toList()
+                .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Tap a button", buttons).build();
+        this.sendClient.sendTemplate(recipientId, buttonTemplate);
     }
 
     private void checkUserStatus(String senderId) {
