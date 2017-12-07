@@ -7,11 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.context.annotation.Bean;
-
-import java.util.*;
-import types.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
  * Entry point for the Spring Boot Application.
@@ -24,6 +21,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  * @author Max Grabenhorst
  */
 @SpringBootApplication
+@EnableScheduling
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);

@@ -1,5 +1,6 @@
 package messengerbot;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -40,6 +41,7 @@ public class MessengerPlatformCallbackHandler {
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
+    private RequestHandler requestHandler;
 
     /**
      * Constructs the {@code MessengerPlatformCallbackHandler} and initializes the {@code MessengerReceiveClient}.
@@ -64,6 +66,7 @@ public class MessengerPlatformCallbackHandler {
                 .onMessageReadEvent(newMessageReadEventHandler()).fallbackEventHandler(newFallbackEventHandler())
                 .build();
         this.sendClient = sendClient;
+        requestHandler = new RequestHandler();
     }
 
     /**
@@ -103,6 +106,19 @@ public class MessengerPlatformCallbackHandler {
             logger.warn("Processing of callback payload failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    /**
+     * Automated job to send messages out to subs
+     */
+    @Scheduled(cron = "*/25 * * * * *")
+    private void sendAutomatedMessages() {
+        /*try {
+            logger.info(String.valueOf(requestHandler.GetSubscribers().get(1).getFacebook_id()));
+        } catch (Exception e) {
+        
+        }*/
+        logger.info("automated message!");
     }
 
     private TextMessageEventHandler newTextMessageEventHandler() {
