@@ -250,7 +250,7 @@ public class MessengerPlatformCallbackHandler {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
                 .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
-                
+                .addTextQuickReply("Ben ik al gebaoneerd?.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
                 .build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
