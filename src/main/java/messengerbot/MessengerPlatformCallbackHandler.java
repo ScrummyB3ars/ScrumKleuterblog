@@ -122,6 +122,9 @@ public class MessengerPlatformCallbackHandler {
                     case "giff":
                         sendGifMessage(senderId);
                         break;
+                    case "help":
+                        sendHelp();
+                        break;
                     case "aboneer":
                         subcribeUser(senderId);
                         break;
@@ -136,6 +139,10 @@ public class MessengerPlatformCallbackHandler {
                 handleSendException(e);
             }
         };
+    }
+
+    private void sendHelp() {
+        
     }
 
     private void checkUserStatus(String senderId) {
