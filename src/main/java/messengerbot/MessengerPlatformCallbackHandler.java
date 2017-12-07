@@ -135,6 +135,9 @@ public class MessengerPlatformCallbackHandler {
                     case "aboneer":
                         subcribeUser(senderId);
                         break;
+                    case "Ben ik al geregistreerd":
+                        checkUserStatus(senderId);
+                        break;
                     default:
                         sendTextMessage(senderId, "Hallo!");
                         sendRegistrationMessage(senderId);
@@ -143,6 +146,10 @@ public class MessengerPlatformCallbackHandler {
                 handleSendException(e);
             }
         };
+    }
+
+    private void checkUserStatus(String senderId) {
+
     }
 
     private void subcribeUser(String senderId) {
