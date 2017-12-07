@@ -11,6 +11,8 @@ import com.github.messenger4j.receive.events.AttachmentMessageEvent.AttachmentTy
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Payload;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.*;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.github.messenger4j.MessengerPlatform.*;
+
+import types.*;
 
 /**
  * This is the main class for inbound and outbound communication with the Facebook Messenger Platform.
