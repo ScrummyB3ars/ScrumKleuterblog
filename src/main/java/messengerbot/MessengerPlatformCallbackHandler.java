@@ -162,6 +162,7 @@ public class MessengerPlatformCallbackHandler {
                 this.sendClient.sendTextMessage(senderId, "U bent al reeds geregistreerd");
             }
             else {
+                this.sendClient.sendTextMessage(senderId, "U bent nog niet geregistreerd");
                 sendRegistrationMessage(senderId);
             }
         }catch (Exception e){
