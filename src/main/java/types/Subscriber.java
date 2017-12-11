@@ -3,12 +3,12 @@ package types;
 public class Subscriber {
   private int id;
   private String facebook_id;
-  private int age_group;
+  private int age_group_id;
 
-  public Subscriber(int id, String facebook_id, int age_group) {
+  public Subscriber(int id, String facebook_id, int age_group_id) {
     this.id = id;
     this.facebook_id = facebook_id;
-    this.age_group = age_group;
+    this.age_group_id = age_group_id;
   }
 
   public Subscriber() {
@@ -31,8 +31,8 @@ public class Subscriber {
   /**
    * @return the user_type
    */
-  public int getUser_type() {
-    return age_group;
+  public int getAge_group_id() {
+    return age_group_id;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class Subscriber {
     }
     Subscriber other = (Subscriber) o;
     return this.getId() == other.getId() && this.getFacebook_id() == other.getFacebook_id()
-        && this.getUser_type() == other.getUser_type();
+        && this.getAge_group_id() == other.getAge_group_id();
   }
 
 }
