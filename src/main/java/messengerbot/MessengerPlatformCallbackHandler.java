@@ -166,7 +166,7 @@ public class MessengerPlatformCallbackHandler {
             this.sendClient.sendTemplate(recipientId, buttonTemplate);
         }catch (Exception e){
 
-        }""
+        }
     }
 
     private void checkUserStatus(String senderId) {
