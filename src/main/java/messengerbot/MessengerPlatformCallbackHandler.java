@@ -146,33 +146,40 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
-       
+
         try{
 
             if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
+                sendHelpSub(recipientId);
 
-                List<com.github.messenger4j.send.buttons.Button>  buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-
-                        .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-                        .addPostbackButton("Tip", "tip").toList()
-                        .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
-                        .build();
-                final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
-                this.sendClient.sendTemplate(recipientId, buttonTemplate);
             }
             else {
-
-                List<com.github.messenger4j.send.buttons.Button>  buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                       .addPostbackButton("Aboneer", "aboneer").toList()
-                       .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
-                       .build();
-                final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
-                this.sendClient.sendTemplate(recipientId, buttonTemplate);
+                sendHelpUnSub(recipientId);
             }
 
         }catch (Exception e){
 
         }
+    }
+    private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        List<com.github.messenger4j.send.buttons.Button>  buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+
+                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
+                .addPostbackButton("Tip", "tip").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+                .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
+        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+    }
+    private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        List<com.github.messenger4j.send.buttons.Button>  buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+                .addPostbackButton("Aboneer", "aboneer").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+                .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
+        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
     }
 
     private void checkUserStatus(String senderId) {
