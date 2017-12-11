@@ -146,7 +146,7 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
-
+        sendHelpSub(recipientId);
         try{
 
             if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
