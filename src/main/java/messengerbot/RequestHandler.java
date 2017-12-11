@@ -45,9 +45,12 @@ public class RequestHandler {
    * @return a list of strings, the sender-id's
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
-    HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
-    Subscriber[] subscribers = response.getBody();
-    return Arrays.asList(subscribers);
+
+      HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
+      Subscriber[] subscribers = response.getBody();
+      return Arrays.asList(subscribers);
+
+
   }
 
   public void  AddSubscriber(Subscriber sub) throws UnirestException {
