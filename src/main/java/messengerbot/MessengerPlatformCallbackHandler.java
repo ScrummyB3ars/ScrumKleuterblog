@@ -165,8 +165,10 @@ public class MessengerPlatformCallbackHandler {
                        .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
                        .build();
             }
+            this.sendClient.sendTextMessage(recipientId, "na de lussen");
             final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
             this.sendClient.sendTemplate(recipientId, buttonTemplate);
+            this.sendClient.sendTextMessage(recipientId, "einde");
         }catch (Exception e){
 
         }
