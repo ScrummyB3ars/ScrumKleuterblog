@@ -42,6 +42,7 @@ public class MessengerPlatformCallbackHandler {
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
+    private RequestHandler requestHandler;
 
     /**
      * Constructs the {@code MessengerPlatformCallbackHandler} and initializes the {@code MessengerReceiveClient}.
@@ -56,6 +57,7 @@ public class MessengerPlatformCallbackHandler {
             @Value("${messenger4j.verifyToken}") final String verifyToken, final MessengerSendClient sendClient) {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
+        requestHandler = new RequestHandler();
         this.receiveClient = MessengerPlatform.newReceiveClientBuilder(appSecret, verifyToken)
                 .onTextMessageEvent(newTextMessageEventHandler())
                 .onAttachmentMessageEvent(newAttachmentMessageEventHandler())
@@ -155,6 +157,18 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void checkUserStatus(String senderId) {
+        try{
+            if (requestHandler.UserIsSub("05245486", requestHandler.GetSubscribers())){
+                this.sendClient.sendTextMessage(senderId, "U bent als reeds geregistreerd");
+            }
+            else {
+                sendRegistrationMessage(senderId);
+            }
+        }catch (Exception e){
+
+        }
+
+
 
     }
 

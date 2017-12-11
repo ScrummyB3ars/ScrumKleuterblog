@@ -50,7 +50,12 @@ public class RequestHandler {
     return Arrays.asList(subscribers);
   }
 
-  public void  PostSubscriber(Subscriber sub) throws UnirestException {
+  public void  AddSubscriber(Subscriber sub) throws UnirestException {
+    HttpResponse<JsonNode> response = Unirest.post("/addSubscriber")
+            .header("accept", "application/json")
+            .field("facebook_id",sub.getFacebook_id())
+            .field("age_group",sub.getAge_group_id())
+            .asJson();
 
   }
 
