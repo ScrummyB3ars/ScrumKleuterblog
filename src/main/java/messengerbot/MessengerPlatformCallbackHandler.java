@@ -134,7 +134,7 @@ public class MessengerPlatformCallbackHandler {
                         checkUserStatus(senderId);
                         break;
                     default:
-                        sendTextMessage(senderId, messageText.toLowerCase());
+                        sendTextMessage(senderId, "Hallo");
                         sendRegistrationMessage(senderId);
                 }
             } catch (MessengerApiException | MessengerIOException e) {

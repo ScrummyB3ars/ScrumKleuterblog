@@ -44,4 +44,5 @@ public class Subscriber {
     return this.getId() == other.getId() && this.getFacebook_id() == other.getFacebook_id()
         && this.getUser_type() == other.getUser_type();
   }
+
 }

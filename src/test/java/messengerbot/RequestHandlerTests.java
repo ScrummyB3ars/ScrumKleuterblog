@@ -29,4 +29,17 @@ public class RequestHandlerTests {
       System.out.println("Can't fetch subs: " + e);
     }
   }
+  @Test
+  public void TestUserIsSub() {
+    List<Subscriber> subList = new ArrayList<Subscriber>();
+    Subscriber testSub = new Subscriber(1, "2147483647", 1);
+    subList.add(testSub);
+
+    try {
+
+      assertEquals(requestHandler.UserIsSub("2147483647",subList), true);
+    } catch (Exception e) {
+      System.out.println("Failed to find user" + e);
+    }
+  }
 }

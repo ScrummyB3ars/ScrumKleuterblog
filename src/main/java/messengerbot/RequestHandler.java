@@ -53,4 +53,9 @@ public class RequestHandler {
   public void  PostSubscriber(Subscriber sub) throws UnirestException {
 
   }
+
+  public boolean UserIsSub(String recipientId, List<Subscriber> sub ) {
+    return  sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
+  }
+
 }
