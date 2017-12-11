@@ -158,8 +158,8 @@ public class MessengerPlatformCallbackHandler {
 
     private void checkUserStatus(String senderId) {
         try{
-            if (requestHandler.UserIsSub("05245486", requestHandler.GetSubscribers())){
-                this.sendClient.sendTextMessage(senderId, "U bent als reeds geregistreerd");
+            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())){
+                this.sendClient.sendTextMessage(senderId, "U bent al reeds geregistreerd");
             }
             else {
                 sendRegistrationMessage(senderId);
