@@ -114,14 +114,17 @@ public class MessengerPlatformCallbackHandler {
     /**
      * Automated job to send messages out to subs
      */
-    @Scheduled(cron = "*/25 * * * * *")
+    @Scheduled(cron = "*/60 * * * * *")
     private void sendAutomatedMessages() {
-        /*try {
-            logger.info(String.valueOf(requestHandler.GetSubscribers().get(1).getFacebook_id()));
+        try {
+            List<Subscriber> subs = requestHandler.GetSubscribers();
+            String tipOfTheDay = requestHandler.GetRandomTip().getTip_content();
+            subs.forEach(sub -> {
+                sendTextMessage(sub.getFacebook_id(), tipOfTheDay);
+            });
         } catch (Exception e) {
-        
-        }*/
-        logger.info("automated message!");
+            logger.info("Failed to send out automated messages, retrying in 60s...");
+        }
     }
 
     private TextMessageEventHandler newTextMessageEventHandler() {
@@ -138,21 +141,21 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
-                    case "gif":
-                        sendGifMessage(senderId);
-                        break;
-                    case "help":
-                        sendHelp(senderId);
-                        break;
-                    case "aboneer":
-                        subcribeUser(senderId);
-                        break;
-                    case "ben ik al geregistreerd":
-                        checkUserStatus(senderId);
-                        break;
-                    default:
-                        sendTextMessage(senderId, "Hallo");
-                        sendRegistrationMessage(senderId);
+                case "gif":
+                    sendGifMessage(senderId);
+                    break;
+                case "help":
+                    sendHelp(senderId);
+                    break;
+                case "aboneer":
+                    subcribeUser(senderId);
+                    break;
+                case "ben ik al geregistreerd":
+                    checkUserStatus(senderId);
+                    break;
+                default:
+                    sendTextMessage(senderId, "Hallo");
+                    sendRegistrationMessage(senderId);
                 }
             } catch (MessengerApiException | MessengerIOException e) {
                 handleSendException(e);
@@ -162,51 +165,51 @@ public class MessengerPlatformCallbackHandler {
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
         sendHelpSub(recipientId);
-        try{
+        try {
 
-            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
+            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())) {
                 sendHelpSub(recipientId);
 
-            }
-            else {
+            } else {
                 sendHelpUnSub(recipientId);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
-    private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
-        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
 
-                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-                .addPostbackButton("Tip", "tip").toList()
-                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+    private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
+                .newListBuilder()
+
+                .addPostbackButton("Uitschrijven", "uitschrijven").toList().addPostbackButton("Tip", "tip").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList().build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
                 .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
         this.sendClient.sendTemplate(recipientId, buttonTemplate);
 
     }
+
     private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
-        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                .addPostbackButton("Aboneer", "aboneer").toList()
-                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
+                .newListBuilder().addPostbackButton("Aboneer", "aboneer").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList().build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
                 .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
         this.sendClient.sendTemplate(recipientId, buttonTemplate);
 
     }
 
     private void checkUserStatus(String senderId) {
-        try{
-            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())){
+        try {
+            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())) {
                 this.sendClient.sendTextMessage(senderId, "U bent al reeds geregistreerd");
-            }
-            else {
+            } else {
                 this.sendClient.sendTextMessage(senderId, "U bent nog niet geregistreerd");
                 sendRegistrationMessage(senderId);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -222,8 +225,7 @@ public class MessengerPlatformCallbackHandler {
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
-                .build();
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
     }
