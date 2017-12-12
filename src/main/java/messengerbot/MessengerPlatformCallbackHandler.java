@@ -12,6 +12,7 @@ import com.github.messenger4j.receive.events.AttachmentMessageEvent.AttachmentTy
 import com.github.messenger4j.receive.events.AttachmentMessageEvent.Payload;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.*;
+import com.github.messenger4j.send.templates.ButtonTemplate;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +58,7 @@ public class MessengerPlatformCallbackHandler {
             @Value("${messenger4j.verifyToken}") final String verifyToken, final MessengerSendClient sendClient) {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
+        requestHandler = new RequestHandler();
         this.receiveClient = MessengerPlatform.newReceiveClientBuilder(appSecret, verifyToken)
                 .onTextMessageEvent(newTextMessageEventHandler())
                 .onAttachmentMessageEvent(newAttachmentMessageEventHandler())
@@ -135,17 +138,81 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
-                case "gif":
-                    sendGifMessage(senderId);
-                    break;
-                default:
-                    sendTextMessage(senderId, "Hallo!");
-                    sendRegistrationMessage(senderId);
+                    case "gif":
+                        sendGifMessage(senderId);
+                        break;
+                    case "help":
+                        sendHelp(senderId);
+                        break;
+                    case "aboneer":
+                        subcribeUser(senderId);
+                        break;
+                    case "ben ik al geregistreerd":
+                        checkUserStatus(senderId);
+                        break;
+                    default:
+                        sendTextMessage(senderId, "Hallo");
+                        sendRegistrationMessage(senderId);
                 }
             } catch (MessengerApiException | MessengerIOException e) {
                 handleSendException(e);
             }
         };
+    }
+
+    private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
+        sendHelpSub(recipientId);
+        try{
+
+            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
+                sendHelpSub(recipientId);
+
+            }
+            else {
+                sendHelpUnSub(recipientId);
+            }
+
+        }catch (Exception e){
+
+        }
+    }
+    private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+
+                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
+                .addPostbackButton("Tip", "tip").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+                .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
+        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+    }
+    private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+                .addPostbackButton("Aboneer", "aboneer").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
+                .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
+        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+    }
+
+    private void checkUserStatus(String senderId) {
+        try{
+            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())){
+                this.sendClient.sendTextMessage(senderId, "U bent al reeds geregistreerd");
+            }
+            else {
+                this.sendClient.sendTextMessage(senderId, "U bent nog niet geregistreerd");
+                sendRegistrationMessage(senderId);
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    private void subcribeUser(String senderId) {
+
     }
 
     private void sendGifMessage(String recipientId) throws MessengerApiException, MessengerIOException {
@@ -155,7 +222,8 @@ public class MessengerPlatformCallbackHandler {
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
+                .build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
     }

@@ -1,5 +1,6 @@
 package messengerbot;
 
+import com.mashape.unirest.http.JsonNode;
 import types.Subscriber;
 
 import java.util.*;
@@ -44,8 +45,25 @@ public class RequestHandler {
    * @return a list of strings, the sender-id's
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
-    HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
-    Subscriber[] subscribers = response.getBody();
-    return Arrays.asList(subscribers);
+
+      HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
+      Subscriber[] subscribers = response.getBody();
+      return Arrays.asList(subscribers);
+
+
   }
+
+  public void  AddSubscriber(Subscriber sub) throws UnirestException {
+    HttpResponse<JsonNode> response = Unirest.post("/addSubscriber")
+            .header("accept", "application/json")
+            .field("facebook_id",sub.getFacebook_id())
+            .field("age_group",sub.getAge_group_id())
+            .asJson();
+
+  }
+
+  public boolean UserIsSub(String recipientId, List<Subscriber> sub ) {
+    return  sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
+  }
+
 }
