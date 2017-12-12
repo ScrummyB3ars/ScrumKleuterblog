@@ -41,7 +41,7 @@ public class Subscriber {
       return false;
     }
     Subscriber other = (Subscriber) o;
-    return this.getId() == other.getId() && this.getFacebook_id() == other.getFacebook_id()
+    return this.getId() == other.getId() && this.getFacebook_id().equals(other.getFacebook_id())
         && this.getAge_group_id() == other.getAge_group_id();
   }
 
