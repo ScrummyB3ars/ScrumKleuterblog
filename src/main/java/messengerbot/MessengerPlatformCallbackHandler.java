@@ -130,7 +130,8 @@ public class MessengerPlatformCallbackHandler {
                         sendHelp(senderId);
                         break;
                     case "aboneer":
-                        subcribeUser(senderId);
+//                        subcribeUser(senderId);
+                        testssubcribeUser(senderId);
                         break;
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
@@ -216,6 +217,18 @@ public class MessengerPlatformCallbackHandler {
 
         this.sendClient.sendTextMessage(senderId, "einde");
         this.sendClient.sendTextMessage( senderId, "Aan welke leeftijd geeft u les", list);
+    }
+    private void testssubcribeUser(String senderId)throws MessengerApiException, MessengerIOException  {
+//
+        try{
+            Subscriber sub = new Subscriber(senderId,0);
+            requestHandler.AddSubscriber(sub);
+
+
+        }catch (Exception e){
+
+        }
+
     }
 
     private void sendGifMessage(String recipientId) throws MessengerApiException, MessengerIOException {
