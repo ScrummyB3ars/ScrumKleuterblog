@@ -147,23 +147,22 @@ public class MessengerPlatformCallbackHandler {
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
         sendHelpSub(recipientId);
-        try{
-
-            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
-                sendHelpSub(recipientId);
-
-            }
-            else {
-                sendHelpUnSub(recipientId);
-            }
-
-        }catch (Exception e){
-
-        }
+//        try{
+//
+//            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
+//                sendHelpSub(recipientId);
+//
+//            }
+//            else {
+//                sendHelpUnSub(recipientId);
+//            }
+//
+//        }catch (Exception e){
+//
+//        }
     }
     private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
         final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-
                 .addPostbackButton("Uitschrijven", "uitschrijven").toList()
                 .addPostbackButton("Tip", "tip").toList()
                 .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
