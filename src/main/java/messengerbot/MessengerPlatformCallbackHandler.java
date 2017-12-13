@@ -223,7 +223,7 @@ public class MessengerPlatformCallbackHandler {
         try{
             Subscriber sub = new Subscriber(senderId,0);
             requestHandler.AddSubscriber(sub);
-
+            this.sendClient.sendTextMessage(senderId, "sub donde");
 
         }catch (Exception e){
 
