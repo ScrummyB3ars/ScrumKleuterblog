@@ -195,8 +195,29 @@ public class MessengerPlatformCallbackHandler {
         }
     }
 
-    private void subcribeUser(String senderId) {
+    private void subcribeUser(String senderId)throws MessengerApiException, MessengerIOException  {
+//        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+//                .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
+//                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
+//                .build();
+        final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
+        try{
 
+            requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies.addTextQuickReply(ageGroup.getGroup_name(),Integer.toString(ageGroup.getId())).toList());
+//            quickReplies.build();
+
+
+        }catch (Exception e){
+
+        }
+        final List<QuickReply> list = quickReplies.build();
+//        this.sendClient.sendTextMessage( senderId, "Wilt u zich registreren voor tips?", quickReplies);
+//        final QuickReply.ListBuilder testquickReplies = QuickReply.newListBuilder();
+//        testquickReplies.addTextQuickReply("test","test").toList();
+//
+//        testquickReplies.build();
+//
+        this.sendClient.sendTextMessage( senderId, "Aan welke leeftijd geeft u les", list);
     }
 
     private void sendGifMessage(String recipientId) throws MessengerApiException, MessengerIOException {

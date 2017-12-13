@@ -1,6 +1,7 @@
 package messengerbot;
 
 import com.mashape.unirest.http.JsonNode;
+import types.AgeGroup;
 import types.Subscriber;
 
 import java.util.*;
@@ -10,6 +11,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import com.mashape.unirest.http.ObjectMapper;
+
+import static com.mashape.unirest.http.Unirest.get;
 
 public class RequestHandler {
   private final static String URL = "https://api-toddlr.herokuapp.com";
@@ -46,11 +49,17 @@ public class RequestHandler {
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
 
-      HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
+      HttpResponse<Subscriber[]> response = get(URL + "/subscribers").asObject(Subscriber[].class);
       Subscriber[] subscribers = response.getBody();
       return Arrays.asList(subscribers);
 
 
+  }
+
+  public List<AgeGroup> GetAgeGroups() throws UnirestException{
+    HttpResponse<AgeGroup[]> response = get(URL + "/age_groups").asObject(AgeGroup[].class);
+    AgeGroup[] ageGroups= response.getBody();
+    return Arrays.asList(ageGroups);
   }
 
   public void  AddSubscriber(Subscriber sub) throws UnirestException {
