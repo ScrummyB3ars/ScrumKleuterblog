@@ -204,6 +204,7 @@ public class MessengerPlatformCallbackHandler {
         final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
         try{
             this.sendClient.sendTextMessage(senderId, "voor de foreach werk ik nog");
+            this.sendClient.sendTextMessage(senderId, requestHandler.GetAgeGroups().toString());
             requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies.addTextQuickReply(ageGroup.getGroup_name(),Integer.toString(ageGroup.getId())).toList());
 //            quickReplies.build();
 
@@ -212,12 +213,7 @@ public class MessengerPlatformCallbackHandler {
 
         }
         final List<QuickReply> list = quickReplies.build();
-//        this.sendClient.sendTextMessage( senderId, "Wilt u zich registreren voor tips?", quickReplies);
-//        final QuickReply.ListBuilder testquickReplies = QuickReply.newListBuilder();
-//        testquickReplies.addTextQuickReply("test","test").toList();
-//
-//        testquickReplies.build();
-//
+
         this.sendClient.sendTextMessage(senderId, "einde");
         this.sendClient.sendTextMessage( senderId, "Aan welke leeftijd geeft u les", list);
     }
