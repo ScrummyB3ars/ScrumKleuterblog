@@ -204,7 +204,7 @@ public class MessengerPlatformCallbackHandler {
         final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
         try{
             this.sendClient.sendTextMessage(senderId, "voor de foreach werk ik nog");
-            this.sendClient.sendTextMessage(senderId, requestHandler.GetAgeGroups().toString());
+            this.sendClient.sendTextMessage(senderId, requestHandler.GetAgeGroups().get(0).getGroup_name());
             requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies.addTextQuickReply(ageGroup.getGroup_name(),Integer.toString(ageGroup.getId())).toList());
 //            quickReplies.build();
 
