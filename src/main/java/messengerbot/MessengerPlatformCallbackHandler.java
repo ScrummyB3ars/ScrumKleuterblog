@@ -200,9 +200,10 @@ public class MessengerPlatformCallbackHandler {
 //                .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
 //                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
 //                .build();
+        this.sendClient.sendTextMessage(senderId, "ik start");
         final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
         try{
-
+            this.sendClient.sendTextMessage(senderId, "voor de foreach werk ik nog");
             requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies.addTextQuickReply(ageGroup.getGroup_name(),Integer.toString(ageGroup.getId())).toList());
 //            quickReplies.build();
 
@@ -217,6 +218,7 @@ public class MessengerPlatformCallbackHandler {
 //
 //        testquickReplies.build();
 //
+        this.sendClient.sendTextMessage(senderId, "einde");
         this.sendClient.sendTextMessage( senderId, "Aan welke leeftijd geeft u les", list);
     }
 
