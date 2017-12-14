@@ -149,8 +149,8 @@ public class MessengerPlatformCallbackHandler {
                         sendHelp(senderId);
                         break;
                     case "aboneer":
-//                        subcribeUser(senderId);
-                        testssubcribeUser(senderId);
+                        subcribeUser(senderId);
+//                        testssubcribeUser(senderId);
                         break;
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
