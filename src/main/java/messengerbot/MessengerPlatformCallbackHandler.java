@@ -136,7 +136,7 @@ public class MessengerPlatformCallbackHandler {
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
                         break;
-                    case "checkstatus":
+                    case "check status":
                         checkUserStatus(senderId);
                         break;
                     default:
