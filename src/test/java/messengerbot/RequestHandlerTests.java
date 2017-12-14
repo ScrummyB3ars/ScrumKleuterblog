@@ -34,6 +34,7 @@ public class RequestHandlerTests {
   //      System.out.println("Can't fetch subs: " + e);
   //    }
   //  }
+
   @Test
   public void TestUserIsSub() {
     List<Subscriber> subList = new ArrayList<Subscriber>();

@@ -1,8 +1,8 @@
 package messengerbot;
 
 import com.mashape.unirest.http.JsonNode;
-import types.AgeGroup;
-import types.Subscriber;
+
+import types.*;
 
 import java.util.*;
 import com.mashape.unirest.http.HttpResponse;
@@ -48,11 +48,19 @@ public class RequestHandler {
    * @return a list of strings, the sender-id's
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
-
-    HttpResponse<Subscriber[]> response = get(URL + "/subscribers").asObject(Subscriber[].class);
+    HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
     Subscriber[] subscribers = response.getBody();
     return Arrays.asList(subscribers);
+  }
 
+  /**
+   * Returns a list of tips
+   * @return a list of tips
+   */
+  public List<Tip> GetTips() throws UnirestException {
+    HttpResponse<Tip[]> response = Unirest.get(URL + "/tips").asObject(Tip[].class);
+    Tip[] tips = response.getBody();
+    return Arrays.asList(tips);
   }
 
   public List<AgeGroup> GetAgeGroups() throws UnirestException {
@@ -64,6 +72,7 @@ public class RequestHandler {
   public void AddSubscriber(Subscriber sub) throws UnirestException {
     HttpResponse<JsonNode> response = Unirest.post("/addSubscriber").header("accept", "application/json")
         .field("facebook_id", sub.getFacebook_id()).field("age_group", sub.getAge_group_id()).asJson();
+
   }
 
   public boolean UserIsSub(String recipientId, List<Subscriber> sub) {
