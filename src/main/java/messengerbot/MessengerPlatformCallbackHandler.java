@@ -183,7 +183,6 @@ public class MessengerPlatformCallbackHandler {
     }
     private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
         final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                .addPostbackButton("Ben ik al geregistreerd", "ben ik al geregistreerd").toList()
                 .addPostbackButton("Aboneer", "aboneer").toList()
                 .build();
         final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
