@@ -5,6 +5,7 @@ public class Subscriber {
   private String facebook_id;
   private int age_group_id;
 
+
   public Subscriber(int id, String facebook_id, int age_group_id) {
     this.id = id;
     this.facebook_id = facebook_id;

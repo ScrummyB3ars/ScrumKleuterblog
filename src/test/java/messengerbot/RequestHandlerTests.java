@@ -3,6 +3,8 @@ package messengerbot;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -51,7 +53,18 @@ public class RequestHandlerTests {
 
   @Test
   public void TestSubscribeUser() {
+    System.out.println("/////////////start add test" );
+    try{
 
+        Subscriber sub = new Subscriber("69",0);
+        Subscriber addsub = requestHandler.AddSubscriber(sub);
+
+        assertEquals(addsub.getFacebook_id(), sub.getFacebook_id());
+      }
+      catch (Exception e){
+
+        System.out.println(e);
+      }
   }
 
   @Test

@@ -4,6 +4,7 @@ import com.mashape.unirest.http.JsonNode;
 
 import types.*;
 
+import java.io.InputStream;
 import java.util.*;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -11,16 +12,19 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import com.mashape.unirest.http.ObjectMapper;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static com.mashape.unirest.http.Unirest.get;
 
 public class RequestHandler {
+  private static final Logger logger = LoggerFactory.getLogger(MessengerPlatformCallbackHandler.class);
   private final static String URL = "https://api-toddlr.herokuapp.com";
 
   /**
    * Constructor, sets the objectmapper for unirest
    */
   public RequestHandler() {
+
     // sets the object mapper
     Unirest.setObjectMapper(new ObjectMapper() {
       private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
@@ -81,9 +85,10 @@ public class RequestHandler {
     return Arrays.asList(ageGroups);
   }
 
-  public void AddSubscriber(Subscriber sub) throws UnirestException {
-    HttpResponse<JsonNode> response = Unirest.post("/addSubscriber").header("accept", "application/json")
-        .field("facebook_id", sub.getFacebook_id()).field("age_group", sub.getAge_group_id()).asJson();
+  public Subscriber AddSubscriber(Subscriber sub) throws UnirestException {
+    HttpResponse<Subscriber> response = Unirest.post(URL +"/subscribers/add").header("Content-Type", "application/json").body(sub)
+        .asObject(Subscriber.class);
+    return response.getBody();
 
   }
 
