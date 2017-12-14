@@ -49,30 +49,25 @@ public class RequestHandler {
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
 
-      HttpResponse<Subscriber[]> response = get(URL + "/subscribers").asObject(Subscriber[].class);
-      Subscriber[] subscribers = response.getBody();
-      return Arrays.asList(subscribers);
-
+    HttpResponse<Subscriber[]> response = get(URL + "/subscribers").asObject(Subscriber[].class);
+    Subscriber[] subscribers = response.getBody();
+    return Arrays.asList(subscribers);
 
   }
 
-  public List<AgeGroup> GetAgeGroups() throws UnirestException{
+  public List<AgeGroup> GetAgeGroups() throws UnirestException {
     HttpResponse<AgeGroup[]> response = get(URL + "/age_groups").asObject(AgeGroup[].class);
-    AgeGroup[] ageGroups= response.getBody();
+    AgeGroup[] ageGroups = response.getBody();
     return Arrays.asList(ageGroups);
   }
 
-  public void  AddSubscriber(Subscriber sub) throws UnirestException {
-    HttpResponse<JsonNode> response = Unirest.post("/addSubscriber")
-            .header("accept", "application/json")
-            .field("facebook_id",sub.getFacebook_id())
-            .field("age_group",sub.getAge_group_id())
-            .asJson();
-
+  public void AddSubscriber(Subscriber sub) throws UnirestException {
+    HttpResponse<JsonNode> response = Unirest.post("/addSubscriber").header("accept", "application/json")
+        .field("facebook_id", sub.getFacebook_id()).field("age_group", sub.getAge_group_id()).asJson();
   }
 
-  public boolean UserIsSub(String recipientId, List<Subscriber> sub ) {
-    return  sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
+  public boolean UserIsSub(String recipientId, List<Subscriber> sub) {
+    return sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
   }
 
 }
