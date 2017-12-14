@@ -1,5 +1,6 @@
 package messengerbot;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -68,6 +69,7 @@ public class MessengerPlatformCallbackHandler {
                 .onMessageReadEvent(newMessageReadEventHandler()).fallbackEventHandler(newFallbackEventHandler())
                 .build();
         this.sendClient = sendClient;
+        requestHandler = new RequestHandler();
     }
 
     /**
@@ -109,6 +111,22 @@ public class MessengerPlatformCallbackHandler {
         }
     }
 
+    /**
+     * Automated job to send messages out to subs
+     */
+    @Scheduled(cron = "*/60 * * * * *")
+    private void sendAutomatedMessages() {
+        try {
+            List<Subscriber> subs = requestHandler.GetSubscribers();
+            String tipOfTheDay = requestHandler.GetRandomTip().getTip_content();
+            subs.forEach(sub -> {
+                sendTextMessage(sub.getFacebook_id(), tipOfTheDay);
+            });
+        } catch (Exception e) {
+            logger.info("Failed to send out automated messages, retrying in 60s...");
+        }
+    }
+
     private TextMessageEventHandler newTextMessageEventHandler() {
         return event -> {
             logger.debug("Received TextMessageEvent: {}", event);
@@ -123,6 +141,7 @@ public class MessengerPlatformCallbackHandler {
 
             try {
                 switch (messageText.toLowerCase()) {
+
                     case "gif":
                         sendGifMessage(senderId);
                         break;
@@ -151,59 +170,52 @@ public class MessengerPlatformCallbackHandler {
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
 
-//        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-//                            .addPostbackButton("Aboneer", "aboneer").toList()
-//                           .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-//                           .addPostbackButton("Tip", "tip").toList()
-//                           .build();
-//            final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
-//            this.sendClient.sendTemplate(recipientId, buttonTemplate);
+        try {
 
-
-        try{
-
-            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())){
+            if (requestHandler.UserIsSub(recipientId, requestHandler.GetSubscribers())) {
                 sendHelpSub(recipientId);
 
-            }
-            else {
+            } else {
                 sendHelpUnSub(recipientId);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
+
     private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
         final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
                 .addPostbackButton("checkstatus", "checkstatus").toList()
                 .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-                .addPostbackButton("Tip", "tip").toList()
+                .addPostbackButton("Tip", "tip").toList()  .build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
+
                 .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
         this.sendClient.sendTemplate(recipientId, buttonTemplate);
 
     }
+
     private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
-        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                .addPostbackButton("Aboneer", "aboneer").toList()
-                .addPostbackButton("check status", "checkstatus").toList()
+
+        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
+                .newListBuilder().addPostbackButton("Aboneer", "aboneer").toList()
+                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList().build();
+        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
                 .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
         this.sendClient.sendTemplate(recipientId, buttonTemplate);
 
     }
 
     private void checkUserStatus(String senderId) {
-        try{
-            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())){
+        try {
+            if (requestHandler.UserIsSub(senderId, requestHandler.GetSubscribers())) {
                 this.sendClient.sendTextMessage(senderId, "U bent al reeds geregistreerd");
-            }
-            else {
+            } else {
                 this.sendClient.sendTextMessage(senderId, "U bent nog niet geregistreerd");
                 sendRegistrationMessage(senderId);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -246,8 +258,7 @@ public class MessengerPlatformCallbackHandler {
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
-                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList()
-                .build();
+                .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
     }

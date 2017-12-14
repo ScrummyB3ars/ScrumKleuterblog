@@ -1,8 +1,9 @@
 package messengerbot;
 
 import com.mashape.unirest.http.JsonNode;
-import types.AgeGroup;
-import types.Subscriber;
+
+import types.*;
+
 
 import java.util.*;
 import com.mashape.unirest.http.HttpResponse;
@@ -48,13 +49,35 @@ public class RequestHandler {
    * @return a list of strings, the sender-id's
    */
   public List<Subscriber> GetSubscribers() throws UnirestException {
-
-      HttpResponse<Subscriber[]> response = get(URL + "/subscribers").asObject(Subscriber[].class);
-      Subscriber[] subscribers = response.getBody();
-      return Arrays.asList(subscribers);
+    HttpResponse<Subscriber[]> response = Unirest.get(URL + "/subscribers").asObject(Subscriber[].class);
+    Subscriber[] subscribers = response.getBody();
+    return Arrays.asList(subscribers);
 
 
   }
+
+  /**
+   * Returns a list of tips
+   * @return a list of tips
+   */
+  public List<Tip> GetTips() throws UnirestException {
+    HttpResponse<Tip[]> response = Unirest.get(URL + "/tips").asObject(Tip[].class);
+    Tip[] tips = response.getBody();
+    return Arrays.asList(tips);
+  }
+
+  /**
+   * Gets a random tip from the list
+   */
+  public Tip GetRandomTip() {
+    try {
+      List<Tip> tips = GetTips();
+      return tips.get((new Random()).nextInt(tips.size()));
+    } catch (UnirestException e) {
+      return null;
+    }
+  }
+
 
   public List<AgeGroup> GetAgeGroups() throws UnirestException{
     HttpResponse<AgeGroup[]> response = get(URL + "/age_groups").asObject(AgeGroup[].class);
@@ -69,10 +92,11 @@ public class RequestHandler {
             .field("age_group",sub.getAge_group_id())
             .asJson();
 
+
   }
 
-  public boolean UserIsSub(String recipientId, List<Subscriber> sub ) {
-    return  sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
+  public boolean UserIsSub(String recipientId, List<Subscriber> sub) {
+    return sub.stream().anyMatch(subscriber -> subscriber.getFacebook_id().equals(recipientId));
   }
 
 }
