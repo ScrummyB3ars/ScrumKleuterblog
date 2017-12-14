@@ -63,6 +63,18 @@ public class RequestHandler {
     return Arrays.asList(tips);
   }
 
+  /**
+   * Gets a random tip from the list
+   */
+  public Tip GetRandomTip() {
+    try {
+      List<Tip> tips = GetTips();
+      return tips.get((new Random()).nextInt(tips.size()));
+    } catch (UnirestException e) {
+      return null;
+    }
+  }
+
   public List<AgeGroup> GetAgeGroups() throws UnirestException {
     HttpResponse<AgeGroup[]> response = get(URL + "/age_groups").asObject(AgeGroup[].class);
     AgeGroup[] ageGroups = response.getBody();
