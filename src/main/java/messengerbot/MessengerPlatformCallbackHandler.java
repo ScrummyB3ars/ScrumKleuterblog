@@ -147,13 +147,14 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
-        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-                .addPostbackButton("Tip", "tip").toList()
-                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList()
-                .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons).build();
-        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+                   final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
+                            .addPostbackButton("Aboneer", "aboneer").toList()
+                           .addPostbackButton("Uitschrijven", "uitschrijven").toList()
+                           .addPostbackButton("Tip", "tip").toList()
+                           .build();
+            final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Tap a button", buttons).build();
+            this.sendClient.sendTemplate(recipientId, buttonTemplate);
         //        sendHelpSub(recipientId);
 //        try{
 //
