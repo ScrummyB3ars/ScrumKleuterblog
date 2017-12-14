@@ -142,6 +142,7 @@ public class MessengerPlatformCallbackHandler {
             try {
                 switch (messageText.toLowerCase()) {
 
+
                     case "gif":
                         sendGifMessage(senderId);
                         break;
@@ -150,7 +151,7 @@ public class MessengerPlatformCallbackHandler {
                         break;
                     case "aboneer":
                         subcribeUser(senderId);
-//                        testssubcribeUser(senderId);
+//                       testssubcribeUser(senderId);
                         break;
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
@@ -161,6 +162,8 @@ public class MessengerPlatformCallbackHandler {
                     default:
                         sendTextMessage(senderId, "Hallo");
                         sendRegistrationMessage(senderId);
+
+
                 }
             } catch (MessengerApiException | MessengerIOException e) {
                 handleSendException(e);
@@ -185,10 +188,10 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
-        final  List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button.newListBuilder()
-                .addPostbackButton("checkstatus", "checkstatus").toList()
-                .addPostbackButton("Uitschrijven", "uitschrijven").toList()
-                .addPostbackButton("Tip", "tip").toList()  .build();
+        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
+                .newListBuilder().addPostbackButton("checkstatus", "checkstatus").toList()
+                .addPostbackButton("Uitschrijven", "uitschrijven").toList().addPostbackButton("Tip", "tip").toList()
+                .build();
         final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
 
                 .build();
@@ -220,32 +223,30 @@ public class MessengerPlatformCallbackHandler {
         }
     }
 
-    private void subcribeUser(String senderId)throws MessengerApiException, MessengerIOException  {
-
+    private void subcribeUser(String senderId) throws MessengerApiException, MessengerIOException {
 
         final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
-        try{
-           
+        try {
+
             this.sendClient.sendTextMessage(senderId, requestHandler.GetAgeGroups().get(0).getGroup_name());
-            requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies.addTextQuickReply(ageGroup.getGroup_name(),Integer.toString(ageGroup.getId())).toList());
+            requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies
+                    .addTextQuickReply(ageGroup.getGroup_name(), Integer.toString(ageGroup.getId())).toList());
 
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         final List<QuickReply> list = quickReplies.build();
 
-        this.sendClient.sendTextMessage(senderId, "einde");
-        this.sendClient.sendTextMessage( senderId, "Aan welke leeftijd geeft u les", list);
+        this.sendClient.sendTextMessage(senderId, "Aan welke leeftijd geeft u les", list);
     }
-    private void testssubcribeUser(String senderId)throws MessengerApiException, MessengerIOException  {
-        try{
-            Subscriber sub = new Subscriber(senderId,0);
+
+    private void testssubcribeUser(String senderId) throws MessengerApiException, MessengerIOException {
+        try {
+            Subscriber sub = new Subscriber(senderId, 0);
             requestHandler.AddSubscriber(sub);
             this.sendClient.sendTextMessage(senderId, "sub donde");
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
