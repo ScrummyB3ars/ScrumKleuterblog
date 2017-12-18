@@ -187,6 +187,8 @@ public class MessengerPlatformCallbackHandler {
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                 .addElements()
                     .addElement("Eerste tip")
+                    .subtitle("theme")
+                    .subtitle("lange string met teskt")
                     .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
                     .buttons(buttons)
                     .toList()
