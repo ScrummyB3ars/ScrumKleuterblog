@@ -192,11 +192,11 @@ public class MessengerPlatformCallbackHandler {
             final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                     .addElements()
 
-//                    .addElement(themeTip.getTip_content().substring(0,77)+ "...")
-                    .addElement("test")
+                    .addElement(themeTip.getTip_content().substring(0,77)+ "...")
+//                    .addElement("test")
 
-//                    .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
-                    .subtitle("ik werk soms")
+                    .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
+//                    .subtitle("ik werk soms")
 //                    .imageUrl(themeTip.getPicture())
                     .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
 
