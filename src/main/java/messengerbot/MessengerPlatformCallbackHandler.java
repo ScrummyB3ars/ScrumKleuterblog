@@ -184,6 +184,7 @@ public class MessengerPlatformCallbackHandler {
     private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
         try{
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+            this.sendClient.sendTextMessage(senderId, themeTip.getPicture());
             final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                     .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
                     .addUrlButton("Bekijk tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
@@ -198,7 +199,7 @@ public class MessengerPlatformCallbackHandler {
                     .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
 
                     .imageUrl( "https://api-toddlr.herokuapp.com/images/" + themeTip.getPicture())
-                    
+
 
                     .buttons(buttons)
                     .toList()
