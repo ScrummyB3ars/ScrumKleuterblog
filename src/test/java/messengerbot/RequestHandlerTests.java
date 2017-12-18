@@ -66,6 +66,21 @@ public class RequestHandlerTests {
         System.out.println(e);
       }
   }
+  @Test
+  public void DeleteSubscribeUser() {
+
+    try{
+      final List<Subscriber> subList= requestHandler.GetSubscribers();
+      Subscriber sub = new Subscriber("69");
+      requestHandler.DeleteSubscriber(sub);
+
+      assertEquals(requestHandler.UserIsSub(sub.getFacebook_id(), subList), false);
+    }
+    catch (Exception e){
+
+      System.out.println(e);
+    }
+  }
 
   @Test
   public void TestAgeGroup() {

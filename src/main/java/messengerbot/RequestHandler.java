@@ -79,6 +79,10 @@ public class RequestHandler {
       return null;
     }
   }
+  public ThemeTip GetRandomThemeTip() throws UnirestException {
+    return get(URL + "/theme_tips/random").asObject(ThemeTip.class).getBody();
+  }
+
 
   public List<AgeGroup> GetAgeGroups() throws UnirestException {
     HttpResponse<AgeGroup[]> response = get(URL + "/age_groups").asObject(AgeGroup[].class);

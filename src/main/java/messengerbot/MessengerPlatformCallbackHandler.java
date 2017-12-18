@@ -182,18 +182,20 @@ public class MessengerPlatformCallbackHandler {
         };
     }
     private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
-        final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
-                .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                .addPostbackButton("Call Postback", "Payload for first bubble").toList()
-                .build();
-        final String test = "WT OD 2.2. Kleuters kunnen van een technisch systeem uit hun omgeving aantonen dat verschillende onderdelen ervan in relatie staan tot elkaar in functie van een vooropgesteld doel.";
-        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
-                .addElements()
+        try{
+            final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+            final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
+                    .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                    .addPostbackButton("Call Postback", "Payload for first bubble").toList()
+                    .build();
 
-                    .addElement(test.substring(0,77)+ "...")
+            final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
+                    .addElements()
 
-                    .subtitle(test.substring(0,77)+ "...")
-                    .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
+                    .addElement(themeTip.getTip_content().substring(0,77)+ "...")
+
+                    .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
+                    .imageUrl(themeTip.getPicture())
                     .buttons(buttons)
                     .toList()
 
@@ -202,8 +204,13 @@ public class MessengerPlatformCallbackHandler {
                     .buttons(buttons)
                     .toList()
                     .done()
-                .build();
-        this.sendClient.sendTemplate(senderId, genericTemplate);
+                    .build();
+            this.sendClient.sendTemplate(senderId, genericTemplate);
+
+        }catch (Exception e){
+
+        }
+
     }
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
 
