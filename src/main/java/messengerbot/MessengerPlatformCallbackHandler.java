@@ -159,6 +159,8 @@ public class MessengerPlatformCallbackHandler {
                     case "check status":
                         checkUserStatus(senderId);
                         break;
+                    case "checkstatus":
+                        checkUserStatus(senderId);
                     case "uitschrijven":
                         unSub(senderId);
                         break;
