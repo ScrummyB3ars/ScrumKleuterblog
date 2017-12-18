@@ -235,13 +235,15 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelpUnSub(String recipientId) throws MessengerApiException, MessengerIOException {
+        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+                .addTextQuickReply("Aboneer","sub").toList()
+                .addTextQuickReply("Check status","checkstatus").toList()
+                .addTextQuickReply("Tip","tip").toList()
 
-        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
-                .newListBuilder().addPostbackButton("Aboneer", "aboneer").toList()
-                .addPostbackButton("ben ik al geregistreerd", "aboneer").toList().build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
                 .build();
-        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+        this.sendClient.sendTextMessage(recipientId, "Probeer een van volgende commando's",quickReplies);
+
 
     }
 
@@ -275,7 +277,7 @@ public class MessengerPlatformCallbackHandler {
 
     private void postSubcribeUser(String senderId, int age_id) throws MessengerApiException, MessengerIOException {
         try {
-           
+
             Subscriber sub = new Subscriber(senderId, age_id);
             requestHandler.AddSubscriber(sub);
             this.sendClient.sendTextMessage(senderId, "sub donde");
@@ -367,6 +369,10 @@ public class MessengerPlatformCallbackHandler {
                     case "sub":
                         subcribeUser(senderId);
                         break;
+                    case "tip":
+                        sendTip(senderId);
+                        break;
+
 
                     default:
 
