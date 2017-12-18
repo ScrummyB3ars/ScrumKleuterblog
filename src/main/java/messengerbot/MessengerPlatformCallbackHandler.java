@@ -205,8 +205,11 @@ public class MessengerPlatformCallbackHandler {
                     .buttons(buttons)
                     .toList()
 
-                    .addElement("test")
-                    .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
+                    .addElement(themeTip.getTip_content().substring(0,77)+ "...")
+
+
+                    .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
+                    .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png?anchor=center&mode=crop&width=750&height=345&rnd=131350784610000000")
                     .buttons(buttons)
                     .toList()
                     .done()
