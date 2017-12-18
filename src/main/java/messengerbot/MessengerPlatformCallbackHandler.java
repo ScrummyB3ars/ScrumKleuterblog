@@ -186,8 +186,8 @@ public class MessengerPlatformCallbackHandler {
                 .build();
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                 .addElements()
-                    .addElement("Eerste tip")
-                    .subtitle("Schijnt de zon door het raam? Laat kleuters hun schaduw zoeken. Hoe maak je die?")
+                    .addElement("Laat kleuters hun ogen sluiten en luisteren naar de storm. Hoe kan je deze horen? Geef uitleg aan fenomenen: de wind horen we omdat deze door de bladeren aan de boom waait.")
+                    .subtitle("WT OD 2.2. Kleuters kunnen van een technisch systeem uit hun omgeving aantonen dat verschillende onderdelen ervan in relatie staan tot elkaar in functie van een vooropgesteld doel.")
                     .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
                     .buttons(buttons)
                     .toList()
