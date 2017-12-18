@@ -372,6 +372,9 @@ public class MessengerPlatformCallbackHandler {
                     case "tip":
                         sendTip(senderId);
                         break;
+                    case "uitschrijven":
+                        unSub(senderId);
+                        break;
 
 
                     default:
