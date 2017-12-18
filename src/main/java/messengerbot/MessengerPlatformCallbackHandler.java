@@ -1,5 +1,7 @@
 package messengerbot;
 
+import com.github.messenger4j.send.buttons.Button;
+import com.github.messenger4j.send.templates.GenericTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
@@ -146,6 +148,9 @@ public class MessengerPlatformCallbackHandler {
                     case "gif":
                         sendGifMessage(senderId);
                         break;
+                    case "tip":
+                        sendTip(senderId);
+                        break;
                     case "help":
                         sendHelp(senderId);
                         break;
@@ -175,7 +180,25 @@ public class MessengerPlatformCallbackHandler {
             }
         };
     }
+    private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
+        final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
+                .addUrlButton("Beoordeel Tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                .build();
+        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
+                .addElements()
+                    .addElement("Eerste tip")
+                    .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
+                    .buttons(buttons)
+                    .toList()
 
+                    .addElement("test")
+                    .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
+                    .buttons(buttons)
+                    .toList()
+                    .done()
+                .build();
+        this.sendClient.sendTemplate(senderId, genericTemplate);
+    }
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
 
         try {
@@ -325,8 +348,10 @@ public class MessengerPlatformCallbackHandler {
 
                     case "checkstatus":
                         checkUserStatus(senderId);
+                        break;
                     case "sub":
                         subcribeUser(senderId);
+                        break;
 
                     default:
 
