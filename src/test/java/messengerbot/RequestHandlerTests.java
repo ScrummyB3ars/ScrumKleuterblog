@@ -91,6 +91,16 @@ public class RequestHandlerTests {
       System.out.println(e);
     }
   }
+  @Test
+  public void TestGetInteractionTip(){
+    try{
+      InteractionTip themeTip = requestHandler.GetRandomIteractionTip();
+      System.out.println(themeTip.getTip_content());
+
+    }catch (Exception e){
+      System.out.println(e);
+    }
+  }
 
   @Test
   public void TestAgeGroup() {
