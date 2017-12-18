@@ -53,7 +53,7 @@ public class RequestHandlerTests {
 
   @Test
   public void TestSubscribeUser() {
-    System.out.println("/////////////start add test" );
+
     try{
 
         Subscriber sub = new Subscriber("69",0);

@@ -167,8 +167,6 @@ public class MessengerPlatformCallbackHandler {
                     case "check status":
                         checkUserStatus(senderId);
                         break;
-                    case "checkstatus":
-                        checkUserStatus(senderId);
                     case "uitschrijven":
                         unSub(senderId);
                         break;
@@ -186,6 +184,7 @@ public class MessengerPlatformCallbackHandler {
     private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
         final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                 .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                .addPostbackButton("Call Postback", "Payload for first bubble").toList()
                 .build();
         final String test = "WT OD 2.2. Kleuters kunnen van een technisch systeem uit hun omgeving aantonen dat verschillende onderdelen ervan in relatie staan tot elkaar in functie van een vooropgesteld doel.";
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
@@ -280,8 +279,7 @@ public class MessengerPlatformCallbackHandler {
 
             Subscriber sub = new Subscriber(senderId, age_id);
             requestHandler.AddSubscriber(sub);
-            this.sendClient.sendTextMessage(senderId, "sub donde");
-
+            this.sendClient.sendTextMessage(senderId, "U bent succesvol ingeschreven");
         } catch (Exception e) {
 
         }
