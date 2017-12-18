@@ -31,6 +31,7 @@ import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
+
 import static com.github.messenger4j.MessengerPlatform.*;
 
 import types.*;
@@ -158,7 +159,7 @@ public class MessengerPlatformCallbackHandler {
                         break;
                     case "aboneer":
                        subcribeUser(senderId);
-//                       testssubcribeUser(senderId);
+
                         break;
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
@@ -262,7 +263,7 @@ public class MessengerPlatformCallbackHandler {
         final QuickReply.ListBuilder quickReplies = QuickReply.newListBuilder();
         try {
             requestHandler.GetAgeGroups().forEach(ageGroup -> quickReplies
-                    .addTextQuickReply(ageGroup.getGroup_name(), Integer.toString(ageGroup.getId())).toList());
+                    .addTextQuickReply(ageGroup.getGroup_name(), "postsub_"+Integer.toString(ageGroup.getId())).toList());
 
         } catch (Exception e) {
 
@@ -272,9 +273,10 @@ public class MessengerPlatformCallbackHandler {
         this.sendClient.sendTextMessage(senderId, "Aan welke leeftijd geeft u les", list);
     }
 
-    private void testssubcribeUser(String senderId) throws MessengerApiException, MessengerIOException {
+    private void postSubcribeUser(String senderId, int age_id) throws MessengerApiException, MessengerIOException {
         try {
-            Subscriber sub = new Subscriber(senderId, 0);
+           
+            Subscriber sub = new Subscriber(senderId, age_id);
             requestHandler.AddSubscriber(sub);
             this.sendClient.sendTextMessage(senderId, "sub donde");
 
@@ -355,6 +357,13 @@ public class MessengerPlatformCallbackHandler {
                     case "checkstatus":
                         checkUserStatus(senderId);
                         break;
+                    case "postsub_0":
+                        postSubcribeUser(senderId,0);
+                        break;
+                    case "postsub_1":
+                        postSubcribeUser(senderId,1);
+                        break;
+
                     case "sub":
                         subcribeUser(senderId);
                         break;
