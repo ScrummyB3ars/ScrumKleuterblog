@@ -315,8 +315,11 @@ public class MessengerPlatformCallbackHandler {
 
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
+            final String senderId = event.getSender().getId();
+
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
+
         };
     }
 
@@ -331,6 +334,11 @@ public class MessengerPlatformCallbackHandler {
 
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'", senderId,
                     recipientId, payload, timestamp);
+            try {
+                this.sendClient.sendTextMessage(senderId,"test");
+            }catch (Exception e){
+
+            }
         };
     }
 
