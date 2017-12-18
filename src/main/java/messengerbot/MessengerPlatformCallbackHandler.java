@@ -186,7 +186,7 @@ public class MessengerPlatformCallbackHandler {
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
             final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                     .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                    .addPostbackButton("Call Postback", "Payload for first bubble").toList()
+                    .addUrlButton("Bekijk tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
                     .build();
 
             final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
@@ -198,7 +198,7 @@ public class MessengerPlatformCallbackHandler {
                     .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
 
                     .imageUrl( "https://api-toddlr.herokuapp.com/images/" + themeTip.getPicture())
-                    .imageUrl("https://i.pinimg.com/736x/08/9c/3d/089c3d78279e66f131ee5c2b01d51193--funny-fathers-day-memes-funny-memes.jpg")
+                    
 
                     .buttons(buttons)
                     .toList()
