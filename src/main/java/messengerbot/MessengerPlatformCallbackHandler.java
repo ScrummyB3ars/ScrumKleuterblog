@@ -150,8 +150,8 @@ public class MessengerPlatformCallbackHandler {
                         sendHelp(senderId);
                         break;
                     case "aboneer":
-//                        subcribeUser(senderId);
-                       testssubcribeUser(senderId);
+                       subcribeUser(senderId);
+//                       testssubcribeUser(senderId);
                         break;
                     case "ben ik al geregistreerd":
                         checkUserStatus(senderId);
@@ -274,7 +274,7 @@ public class MessengerPlatformCallbackHandler {
 
     private void sendRegistrationMessage(String recipientId) throws MessengerApiException, MessengerIOException {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Ja!", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION").toList()
+                .addTextQuickReply("Ja!", "sub").toList()
                 .addTextQuickReply("Nee, bedankt.", "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY").toList().build();
 
         this.sendClient.sendTextMessage(recipientId, "Wilt u zich registreren voor tips?", quickReplies);
@@ -320,7 +320,20 @@ public class MessengerPlatformCallbackHandler {
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
             try {
-                this.sendClient.sendTextMessage(senderId,"test");
+                switch (quickReplyPayload.toLowerCase()) {
+
+
+                    case "checkstatus":
+                        checkUserStatus(senderId);
+                    case "sub":
+                        subcribeUser(senderId);
+
+                    default:
+
+
+
+                }
+
             }catch (Exception e){
 
             }
