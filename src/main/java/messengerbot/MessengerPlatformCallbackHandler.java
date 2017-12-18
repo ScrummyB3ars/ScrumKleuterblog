@@ -159,6 +159,9 @@ public class MessengerPlatformCallbackHandler {
                     case "check status":
                         checkUserStatus(senderId);
                         break;
+                    case "uitschrijven":
+                        unSub(senderId);
+                        break;
                     default:
                         sendTextMessage(senderId, "Hallo");
                         sendRegistrationMessage(senderId);
@@ -188,14 +191,14 @@ public class MessengerPlatformCallbackHandler {
     }
 
     private void sendHelpSub(String recipientId) throws MessengerApiException, MessengerIOException {
-        final List<com.github.messenger4j.send.buttons.Button> buttons = com.github.messenger4j.send.buttons.Button
-                .newListBuilder().addPostbackButton("checkstatus", "checkstatus").toList()
-                .addPostbackButton("Uitschrijven", "uitschrijven").toList().addPostbackButton("Tip", "tip").toList()
-                .build();
-        final ButtonTemplate buttonTemplate = ButtonTemplate.newBuilder("Probeer een van volgende commando's", buttons)
+        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+                .addTextQuickReply("Check status","checkstatus").toList()
+                .addTextQuickReply("Uitschrijven","uitschrijven").toList()
+                .addTextQuickReply("Tip","tip").toList()
 
                 .build();
-        this.sendClient.sendTemplate(recipientId, buttonTemplate);
+
+        this.sendClient.sendTextMessage(recipientId, "Probeer een van volgende commando's",quickReplies);
 
     }
 
@@ -247,6 +250,19 @@ public class MessengerPlatformCallbackHandler {
         } catch (Exception e) {
 
         }
+
+    }
+    private void unSub(String senderId) throws MessengerApiException, MessengerIOException {
+
+
+        try {
+            requestHandler.DeleteSubscriber(new Subscriber(senderId));
+            this.sendClient.sendTextMessage(senderId, "U bent succesvol uitgeschreven.");
+
+        } catch (Exception e) {
+
+        }
+
 
     }
 

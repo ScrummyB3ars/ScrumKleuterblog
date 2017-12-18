@@ -14,6 +14,9 @@ public class Subscriber {
 
   public Subscriber() {
   }
+  public Subscriber(String facebook_id) {
+    this.facebook_id = facebook_id;
+  }
 
   public Subscriber(String facebook_id, int age_group_id) {
     this.facebook_id =facebook_id;

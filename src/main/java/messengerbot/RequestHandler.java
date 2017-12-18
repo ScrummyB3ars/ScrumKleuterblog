@@ -2,6 +2,7 @@ package messengerbot;
 
 import com.mashape.unirest.http.JsonNode;
 
+import jdk.nashorn.internal.scripts.JO;
 import types.*;
 
 import java.io.InputStream;
@@ -89,6 +90,13 @@ public class RequestHandler {
     HttpResponse<Subscriber> response = Unirest.post(URL +"/subscribers/add").header("Content-Type", "application/json").body(sub)
         .asObject(Subscriber.class);
     return response.getBody();
+
+  }
+  public void DeleteSubscriber(Subscriber sub) throws UnirestException {
+
+
+    HttpResponse<JsonNode> response = Unirest.delete(URL + "subscribers/delete").header("Content-Type", "application/json")
+            .body(sub).asJson();
 
   }
 
