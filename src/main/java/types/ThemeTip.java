@@ -9,12 +9,12 @@ public class ThemeTip {
     private String development_goal;
     private int themes_id;
     private int age_group_id;
-    private int zill_goal;
+    private String zill_goal;
 
     public ThemeTip() {
     }
 
-    public ThemeTip(int id, String picture, String tip_content, String rich_language, String circumstances, String development_goal, int themes_id, int age_group_id, int zill_goal) {
+    public ThemeTip(int id, String picture, String tip_content, String rich_language, String circumstances, String development_goal, int themes_id, int age_group_id, String zill_goal) {
         this.id = id;
         this.picture = picture;
         this.tip_content = tip_content;
@@ -90,11 +90,11 @@ public class ThemeTip {
         this.age_group_id = age_group_id;
     }
 
-    public int getZill_goal() {
+    public String getZill_goal() {
         return zill_goal;
     }
 
-    public void setZill_goal(int zill_goal) {
+    public void setZill_goal(String zill_goal) {
         this.zill_goal = zill_goal;
     }
 }

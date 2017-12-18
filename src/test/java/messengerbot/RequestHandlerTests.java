@@ -67,7 +67,7 @@ public class RequestHandlerTests {
       }
   }
   @Test
-  public void DeleteSubscribeUser() {
+  public void TestDeleteSubscribeUser() {
 
     try{
       final List<Subscriber> subList= requestHandler.GetSubscribers();
@@ -78,6 +78,16 @@ public class RequestHandlerTests {
     }
     catch (Exception e){
 
+      System.out.println(e);
+    }
+  }
+  @Test
+  public void TestGetThemeTip(){
+    try{
+      ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+      System.out.println(themeTip.getPicture());
+
+    }catch (Exception e){
       System.out.println(e);
     }
   }
