@@ -319,6 +319,12 @@ public class MessengerPlatformCallbackHandler {
 
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
+            try {
+                this.sendClient.sendTextMessage(senderId,"test");
+            }catch (Exception e){
+
+            }
+
 
         };
     }
@@ -334,11 +340,7 @@ public class MessengerPlatformCallbackHandler {
 
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'", senderId,
                     recipientId, payload, timestamp);
-            try {
-                this.sendClient.sendTextMessage(senderId,"test");
-            }catch (Exception e){
 
-            }
         };
     }
 
