@@ -95,7 +95,7 @@ public class RequestHandler {
   public void DeleteSubscriber(Subscriber sub) throws UnirestException {
 
 
-    HttpResponse<JsonNode> response = Unirest.delete(URL + "subscribers/delete").header("Content-Type", "application/json")
+    HttpResponse<JsonNode> response = Unirest.delete(URL + "/subscribers/delete").header("Content-Type", "application/json")
             .body(sub).asJson();
 
   }
