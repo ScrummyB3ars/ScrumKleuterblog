@@ -207,7 +207,7 @@ public class MessengerPlatformCallbackHandler {
 
                     .addElement( "...")
                     .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
-                    .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png?anchor=center&mode=crop&width=750&height=345&rnd=131350784610000000")
+                    .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
                     .buttons(buttons)
                     .toList()
                     .done()
