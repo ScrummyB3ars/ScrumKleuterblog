@@ -224,7 +224,7 @@ public class MessengerPlatformCallbackHandler {
                 .buttons(buttons)
                 .toList()
 
-                .addElement( titleInteraction)
+                .addElement(themeTip.getTip_content().substring(0,77)+ "...")
                 .subtitle("...")
                 .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
                 .buttons(buttons)
