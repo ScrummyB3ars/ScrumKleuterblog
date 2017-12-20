@@ -123,9 +123,9 @@ public class MessengerPlatformCallbackHandler {
     private void sendAutomatedMessages() {
         try {
             List<Subscriber> subs = requestHandler.GetSubscribers();
-            String tipOfTheDay = requestHandler.GetRandomTip().getTip_content();
+
             subs.forEach(sub -> {
-                sendTextMessage(sub.getFacebook_id(), tipOfTheDay);
+                sendTextMessage(sub.getFacebook_id(),"test");
             });
         } catch (Exception e) {
             logger.info("Failed to send out automated messages, retrying in 60s...");
