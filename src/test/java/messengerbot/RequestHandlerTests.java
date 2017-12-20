@@ -60,27 +60,14 @@ public class RequestHandlerTests {
         Subscriber addsub = requestHandler.AddSubscriber(sub);
 
         assertEquals(addsub.getFacebook_id(), sub.getFacebook_id());
+        requestHandler.DeleteSubscriber(sub);
       }
       catch (Exception e){
 
         System.out.println(e);
       }
   }
-  @Test
-  public void TestDeleteSubscribeUser() {
 
-    try{
-      final List<Subscriber> subList= requestHandler.GetSubscribers();
-      Subscriber sub = new Subscriber("69");
-      requestHandler.DeleteSubscriber(sub);
-
-      assertEquals(requestHandler.UserIsSub(sub.getFacebook_id(), subList), false);
-    }
-    catch (Exception e){
-
-      System.out.println(e);
-    }
-  }
   @Test
   public void TestGetThemeTip(){
     try{

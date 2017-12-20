@@ -191,6 +191,7 @@ public class MessengerPlatformCallbackHandler {
     private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
         try{
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+            final  InteractionTip interactionTip = requestHandler.GetRandomIteractionTip();
             sendBuildTip(senderId,themeTip);
 
 
