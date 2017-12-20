@@ -222,7 +222,7 @@ public class MessengerPlatformCallbackHandler {
                 .buttons(buttons)
                 .toList()
 
-                .addElement( interactionTip.getTip_content())
+                .addElement( interactionTip.getTip_content().substring(0,77)+ "...")
                 .subtitle("...")
                 .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
                 .buttons(buttons)
