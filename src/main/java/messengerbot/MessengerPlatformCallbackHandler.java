@@ -120,12 +120,19 @@ public class MessengerPlatformCallbackHandler {
      * Automated job to send messages out to subs
      */
     @Scheduled(cron = "*/60 * * * * *")
-    private void sendAutomatedMessages() {
+    private void sendAutomatedMessages()throws MessengerApiException, MessengerIOException {
         try {
             List<Subscriber> subs = requestHandler.GetSubscribers();
 
             subs.forEach(sub -> {
-                sendTextMessage(sub.getFacebook_id(),"test");
+                try{
+                    final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+                    sendBuildTip(sub.getFacebook_id(),themeTip);
+                }
+                catch (Exception e){
+
+                }
+
             });
         } catch (Exception e) {
             logger.info("Failed to send out automated messages, retrying in 60s...");
@@ -184,41 +191,43 @@ public class MessengerPlatformCallbackHandler {
     private void sendTip(String senderId)throws MessengerApiException, MessengerIOException{
         try{
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
-//            final  InteractionTip interactionTip = requestHandler.GetRandomIteractionTip();
-//            this.sendClient.sendTextMessage(senderId, "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture());
-            String themeTipImgUrl = "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture();
-            final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
-                    .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                    .addUrlButton("Bekijk tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                    .build();
+            sendBuildTip(senderId,themeTip);
 
-            final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
-                    .addElements()
-
-                    .addElement(themeTip.getTip_content().substring(0,77)+ "...")
-
-
-                    .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
-
-                    .imageUrl(themeTipImgUrl)
-
-
-                    .buttons(buttons)
-                    .toList()
-
-                    .addElement( "test ...")
-                    .subtitle("...")
-                    .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
-                    .buttons(buttons)
-                    .toList()
-                    .done()
-                    .build();
-            this.sendClient.sendTemplate(senderId, genericTemplate);
 
         }catch (Exception e){
 
         }
 
+    }
+    private void sendBuildTip(String senderId,ThemeTip themeTip)throws MessengerApiException, MessengerIOException{
+        String themeTipImgUrl = "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture();
+        final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
+                .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                .addUrlButton("Bekijk tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                .build();
+
+        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
+                .addElements()
+
+                .addElement(themeTip.getTip_content().substring(0,77)+ "...")
+
+
+                .subtitle(themeTip.getDevelopment_goal().substring(0,77)+ "...")
+
+                .imageUrl(themeTipImgUrl)
+
+
+                .buttons(buttons)
+                .toList()
+
+                .addElement( "test ...")
+                .subtitle("...")
+                .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
+                .buttons(buttons)
+                .toList()
+                .done()
+                .build();
+        this.sendClient.sendTemplate(senderId, genericTemplate);
     }
     private void sendHelp(String recipientId) throws MessengerApiException, MessengerIOException {
 
