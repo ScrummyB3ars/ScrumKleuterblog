@@ -126,7 +126,7 @@ public class MessengerPlatformCallbackHandler {
 
             subs.forEach(sub -> {
                 try{
-                    final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
+                    final ThemeTip themeTip = requestHandler.GetRandomThemeTipFacebookId(sub.getFacebook_id());
                     sendBuildTip(sub.getFacebook_id(),themeTip);
                 }
                 catch (Exception e){
