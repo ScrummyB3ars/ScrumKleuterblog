@@ -127,7 +127,8 @@ public class MessengerPlatformCallbackHandler {
             subs.forEach(sub -> {
                 try{
                     final ThemeTip themeTip = requestHandler.GetRandomThemeTipFacebookId(sub.getFacebook_id());
-                    sendBuildTip(sub.getFacebook_id(),themeTip);
+                    final  InteractionTip interactionTip = requestHandler.GetRandomIteractionTip();
+                    sendBuildTip(sub.getFacebook_id(),themeTip,interactionTip);
                 }
                 catch (Exception e){
 
@@ -192,7 +193,7 @@ public class MessengerPlatformCallbackHandler {
         try{
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
             final  InteractionTip interactionTip = requestHandler.GetRandomIteractionTip();
-            sendBuildTip(senderId,themeTip);
+            sendBuildTip(senderId,themeTip, interactionTip);
 
 
         }catch (Exception e){
@@ -200,7 +201,7 @@ public class MessengerPlatformCallbackHandler {
         }
 
     }
-    private void sendBuildTip(String senderId,ThemeTip themeTip)throws MessengerApiException, MessengerIOException{
+    private void sendBuildTip(String senderId,ThemeTip themeTip,InteractionTip interactionTip)throws MessengerApiException, MessengerIOException{
         String themeTipImgUrl = "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture();
         final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                 .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
@@ -221,7 +222,7 @@ public class MessengerPlatformCallbackHandler {
                 .buttons(buttons)
                 .toList()
 
-                .addElement( "test ...")
+                .addElement( interactionTip.getTip_content())
                 .subtitle("...")
                 .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
                 .buttons(buttons)
