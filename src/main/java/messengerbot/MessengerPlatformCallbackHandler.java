@@ -194,7 +194,6 @@ public class MessengerPlatformCallbackHandler {
             final ThemeTip themeTip = requestHandler.GetRandomThemeTip();
             final  InteractionTip interactionTip = requestHandler.GetRandomIteractionTip();
             sendBuildTip(senderId,themeTip, interactionTip);
-            sendTextMessage(senderId,interactionTip.getTip_content());
 
 
         }catch (Exception e){
