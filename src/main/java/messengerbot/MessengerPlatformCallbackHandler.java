@@ -206,7 +206,7 @@ public class MessengerPlatformCallbackHandler {
 
         final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                 .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/#/tips/theme/"+themeTip.getId()+"/public").toList()
+                .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/web-platform/#/tips/theme/"+themeTip.getId()+"/public").toList()
                 .build();
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
