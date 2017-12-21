@@ -224,7 +224,7 @@ public class MessengerPlatformCallbackHandler {
                 .buttons(buttons)
                 .toList()
 
-                .addElement("Betrek kleuters op elkaar: wat vind...")
+                .addElement("....")
                 .subtitle("...")
                 .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
                 .buttons(buttons)
