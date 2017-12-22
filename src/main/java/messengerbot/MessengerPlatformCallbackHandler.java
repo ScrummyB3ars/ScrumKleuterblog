@@ -179,8 +179,8 @@ public class MessengerPlatformCallbackHandler {
                         unSub(senderId);
                         break;
                     default:
-                        sendTextMessage(senderId, "Hallo");
-                        sendRegistrationMessage(senderId);
+
+                        sendDefaultMessage(senderId);
 
 
                 }
@@ -201,12 +201,29 @@ public class MessengerPlatformCallbackHandler {
         }
 
     }
+    private void  sendDefaultMessage(String senderId)throws MessengerApiException, MessengerIOException{
+        try{
+            sendTextMessage(senderId, "Hallo");
+            if (requestHandler.UserIsSub(senderId,requestHandler.GetSubscribers())){
+                sendTextMessage(senderId, "Hoe kan ik u verder helpen?");
+                sendHelpSub(senderId);
+
+            }else{
+                sendRegistrationMessage(senderId);
+            }
+
+
+        }catch (Exception e){
+
+        }
+
+    }
     private void sendBuildTip(String senderId,ThemeTip themeTip,InteractionTip interactionTip)throws MessengerApiException, MessengerIOException{
         String themeTipImgUrl = "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture();
 
         final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
                 .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
-                .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/web-platform/#/tips/theme/"+themeTip.getId()+"/public").toList()
+                .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/web-platform/#/tips/theme/"+themeTip.getId()).toList()
                 .build();
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
