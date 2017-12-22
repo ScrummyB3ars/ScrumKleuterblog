@@ -221,9 +221,13 @@ public class MessengerPlatformCallbackHandler {
     private void sendBuildTip(String senderId,ThemeTip themeTip,InteractionTip interactionTip)throws MessengerApiException, MessengerIOException{
         String themeTipImgUrl = "https://api-toddlr.herokuapp.com/images/"+themeTip.getPicture();
 
-        final List<com.github.messenger4j.send.buttons.Button> buttons = Button.newListBuilder()
+        final List<com.github.messenger4j.send.buttons.Button> buttonsTheme = Button.newListBuilder()
                 .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
                 .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/web-platform/#/tips/theme/"+themeTip.getId()).toList()
+                .build();
+        final List<com.github.messenger4j.send.buttons.Button> buttonsInteraction = Button.newListBuilder()
+                .addUrlButton("Beoordeel tip", "https://docs.google.com/forms/d/e/1FAIpQLSekeCPYI_OxUHBOnRPorjyY6BXlMACZmXz2S2OiEYhQIxUSXw/viewform").toList()
+                .addUrlButton("Bekijk tip", "https://scrummyb3ars.github.io/web-platform/#/tips/interaction/"+interactionTip.getId()).toList()
                 .build();
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
@@ -237,12 +241,12 @@ public class MessengerPlatformCallbackHandler {
                 .imageUrl(themeTipImgUrl)
 
 
-                .buttons(buttons)
+                .buttons(buttonsTheme)
                 .toList()
 
                 .addElement(interactionTip.getTip_content().substring(0,77)+ "...")
                 .imageUrl("https://www.onlineseminar.nl/media/1244/ols-tip-1.png")
-                .buttons(buttons)
+                .buttons(buttonsInteraction)
                 .toList()
                 .done()
                 .build();
